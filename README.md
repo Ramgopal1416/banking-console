@@ -1,3 +1,5 @@
+CITS9223
+
 # Banking System Console (phase 1, educational simulation)
 
 Simulated banking only. Not connected to real payment infrastructure.
