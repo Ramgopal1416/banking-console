@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/bank_console}
+    username: root
+    password: Ramgopal
+  jpa:
+    hibernate.ddl-auto: validate
+    open-in-view: false
+  flyway.enabled: true
+  servlet.multipart.max-request-size: 1MB
+server:
+  tomcat.max-http-form-post-size: 1MB
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-expiry-seconds: ${JWT_ACCESS_TOKEN_EXPIRY:900}
+    refresh-expiry-seconds: ${JWT_REFRESH_TOKEN_EXPIRY:604800}
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  transfer.max-amount: ${TRANSFER_MAX_AMOUNT:10000.00}
+management.endpoints.web.exposure.include: health

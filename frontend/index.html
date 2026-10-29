@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Banking System Console – UI preview</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--ink:#0f1b33;--mute:#5b6882;--line:#e2e7f0;--accent:#2563eb;--accent2:#1d4ed8;--side:#0b1730;--ok:#0f7b4f;--okbg:#dff5ea;--bad:#b42318;--badbg:#fde4e1;--warn:#8a5a00;--warnbg:#fdf0d0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1122;--card:#111b33;--ink:#e8edf7;--mute:#93a1bd;--line:#223050;--accent:#4f8cff;--accent2:#6ea0ff;--okbg:#0f3a2a;--ok:#6fe0a8;--badbg:#431a16;--bad:#ff9a8f;--warnbg:#3d2f0b;--warn:#f5c869}}
+:root[data-theme="dark"]{--bg:#0a1122;--card:#111b33;--ink:#e8edf7;--mute:#93a1bd;--line:#223050;--accent:#4f8cff;--accent2:#6ea0ff;--okbg:#0f3a2a;--ok:#6fe0a8;--badbg:#431a16;--bad:#ff9a8f;--warnbg:#3d2f0b;--warn:#f5c869}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+aside{background:linear-gradient(180deg,#0b1730,#0e2147);color:#c9d4ea;padding:20px 12px;position:sticky;top:0;height:100vh}
+aside h1{font-size:16px;color:#fff;margin:0 8px 22px;font-weight:600}
+aside h1 small{display:block;font-weight:400;color:#8fa3c8;font-size:12px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:inherit;font:inherit;padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:2px;transition:background .15s}
+nav button:hover{background:#ffffff14}
+nav button[aria-current=true]{background:var(--accent);color:#fff}
+nav button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+main{padding:22px 28px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+h2{margin:0;font-size:22px;font-weight:600}
+.banner{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin:10px 0 18px}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:500;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--accent2)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:3fr 2fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card h3{margin:0 0 12px;font-size:15px;font-weight:600}
+.bal{font-size:32px;font-weight:600;letter-spacing:-.5px}
+.mute{color:var(--mute);font-size:13px}
+.acct{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.acct:first-of-type{border-top:0}
+.badge{font-size:12px;padding:2px 9px;border-radius:99px;font-weight:500}
+.COMPLETED,.ACTIVE{background:var(--okbg);color:var(--ok)}.FAILED{background:var(--badbg);color:var(--bad)}.PENDING{background:var(--warnbg);color:var(--warn)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:500;cursor:pointer}
+td.amt{text-align:right;font-variant-numeric:tabular-nums}.neg{color:var(--bad)}.pos{color:var(--ok)}
+label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.row input,.row select{width:auto;flex:1 1 140px}
+.err{color:var(--bad);font-size:13px;margin-top:8px;min-height:18px}
+#toast{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;z-index:20}
+#toast.on{opacity:1;transform:none}
+svg text{fill:var(--mute);font-size:11px}
+.legend span{display:inline-block;width:10px;height:10px;border-radius:3px;margin:0 6px 0 12px}
+.empty{padding:26px;text-align:center;color:var(--mute)}
+@media (max-width:860px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:12px}nav{display:flex;gap:4px;overflow-x:auto}nav button{white-space:nowrap;width:auto}aside h1{margin-bottom:10px}.g3,.g2{grid-template-columns:1fr}main{padding:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <h1>Banking Console<small>Customer view</small></h1>
+  <nav id="nav"></nav>
+</aside>
+<main>
+  <div class="top"><h2 id="title"></h2><button class="btn ghost" id="theme">Switch theme</button></div>
+  <div class="banner">UI preview with sample data held in your browser. The real app will load everything from the Spring Boot API and MySQL.</div>
+  <div id="view"></div>
+</main>
+</div>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+const fmt=n=>n.toLocaleString("en-US",{style:"currency",currency:"USD"});
+const mask=n=>"•••• "+n.slice(-4);
+const state={
+  accounts:[{id:1,no:"482910375521",type:"Savings",bal:12480.5,status:"ACTIVE"},{id:2,no:"482910375998",type:"Current",bal:3215.75,status:"ACTIVE"}],
+  tx:[
+    {ref:"TXN-9F2A71C0B3D4E5A1",date:"2026-10-28",type:"TRANSFER",desc:"Rent payment",amt:-1200,status:"COMPLETED"},
+    {ref:"TXN-4B7C19E2A8F03D66",date:"2026-10-25",type:"DEPOSIT",desc:"Salary (simulated)",amt:4200,status:"COMPLETED"},
+    {ref:"TXN-C81D5A07E2B94F13",date:"2026-10-22",type:"WITHDRAWAL",desc:"Cash out (simulated)",amt:-300,status:"COMPLETED"},
+    {ref:"TXN-27E0B6D9A41C8F52",date:"2026-10-19",type:"TRANSFER",desc:"Insufficient funds",amt:-9000,status:"FAILED"},
+    {ref:"TXN-6A39D4F1C0B27E85",date:"2026-10-15",type:"TRANSFER",desc:"Savings top-up",amt:-500,status:"PENDING"},
+    {ref:"TXN-E5C2A8B71D036F94",date:"2026-09-26",type:"DEPOSIT",desc:"Salary (simulated)",amt:4200,status:"COMPLETED"},
+    {ref:"TXN-1D8F63A5B9C7E042",date:"2026-09-12",type:"WITHDRAWAL",desc:"Utilities",amt:-640,status:"COMPLETED"},
+    {ref:"TXN-B04E7C2193DA58F6",date:"2026-08-27",type:"DEPOSIT",desc:"Salary (simulated)",amt:4200,status:"COMPLETED"},
+    {ref:"TXN-93A6F1D8C2E5047B",date:"2026-08-10",type:"WITHDRAWAL",desc:"Groceries",amt:-910,status:"COMPLETED"}
+  ],
+  sort:{k:"date",d:-1},q:"",f:"ALL",page:"dash"
+};
+const pages={dash:"Dashboard",transfer:"Transfer money",tx:"Transactions"};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2600)}
+function nav(){$("#nav").innerHTML=Object.entries(pages).map(([k,v])=>`<button data-p="${k}" aria-current="${k===state.page}">${v}</button>`).join("");
+  $("#nav").onclick=e=>{const p=e.target.dataset.p;if(p){state.page=p;render()}}}
+function monthly(){const m={};state.tx.filter(t=>t.status==="COMPLETED").forEach(t=>{const k=t.date.slice(0,7);m[k]=m[k]||{i:0,e:0};t.amt>0?m[k].i+=t.amt:m[k].e-=t.amt});return Object.entries(m).sort()}
+function chart(){const d=monthly(),max=Math.max(...d.flatMap(([,v])=>[v.i,v.e]),1);const w=60;
+  return `<svg viewBox="0 0 ${d.length*100+20} 190" width="100%" role="img" aria-label="Monthly income and expenses">`+d.map(([k,v],i)=>{const x=20+i*100,hi=v.i/max*130,he=v.e/max*130;
+  return `<rect x="${x}" y="${150-hi}" width="28" height="${hi}" rx="4" fill="var(--accent)"/><rect x="${x+32}" y="${150-he}" width="28" height="${he}" rx="4" fill="#94a3c4"/><text x="${x+30}" y="172" text-anchor="middle">${k.slice(5)}/${k.slice(2,4)}</text>`}).join("")+`</svg>
+  <div class="legend mute"><span style="background:var(--accent)"></span>Income<span style="background:#94a3c4"></span>Expenses</div>`}
+function dash(){const total=state.accounts.reduce((s,a)=>s+a.bal,0),pend=state.tx.filter(t=>t.status==="PENDING").length;
+  return `<div class="grid g3" style="margin-bottom:16px"><div class="card"><div class="mute">Total available balance</div><div class="bal">${fmt(total)}</div><div class="mute">Welcome back, Priya Raman</div></div>
+  <div class="card"><div class="mute">Accounts</div><div class="bal">${state.accounts.length}</div><div class="mute">All active</div></div>
+  <div class="card"><div class="mute">Pending transactions</div><div class="bal">${pend}</div><div class="mute">Awaiting completion</div></div></div>
+  <div class="grid g2"><div class="card"><h3>Income and expenses by month</h3>${chart()}</div>
+  <div class="card"><h3>My accounts</h3>${state.accounts.map(a=>`<div class="acct"><div><strong>${a.type}</strong><div class="mute">${mask(a.no)}</div></div><div style="text-align:right"><div>${fmt(a.bal)}</div><span class="badge ${a.status}">${a.status}</span></div></div>`).join("")}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-go="transfer">Transfer money</button><button class="btn ghost" data-go="tx">View transactions</button></div></div></div>`}
+function transfer(){return `<div class="card" style="max-width:520px"><h3>New transfer</h3>
+  <label for="src">From account</label><select id="src">${state.accounts.map(a=>`<option value="${a.id}">${a.type} ${mask(a.no)} – ${fmt(a.bal)}</option>`).join("")}</select>
+  <label for="dst">Destination account number</label><input id="dst" inputmode="numeric" maxlength="12" placeholder="12 digits" value="482910375998">
+  <label for="amt">Amount (USD)</label><input id="amt" inputmode="decimal" placeholder="0.00">
+  <label for="desc">Description</label><input id="desc" maxlength="80" placeholder="What is this for?">
+  <div class="err" id="err" role="alert"></div><button class="btn" id="go">Send transfer</button>
+  <p class="mute">Each submission carries a unique idempotency key, so a double-click cannot send money twice.</p></div>`}
+let busyKey=null;
+function doTransfer(){const src=state.accounts.find(a=>a.id==$("#src").value),dstNo=$("#dst").value.trim(),amt=Math.round(parseFloat($("#amt").value)*100)/100,e=$("#err");
+  const fail=m=>{e.textContent=m};
+  if(!/^\d{12}$/.test(dstNo))return fail("Enter a valid 12-digit account number.");
+  if(!(amt>0))return fail("Amount must be greater than zero.");
+  if(amt>10000)return fail("Amount exceeds the 10,000.00 transfer limit.");
+  const dst=state.accounts.find(a=>a.no===dstNo);
+  if(!dst)return fail("Destination account not found.");
+  if(dst.id===src.id)return fail("Source and destination must be different.");
+  if(src.bal<amt){state.tx.unshift({ref:ref(),date:today(),type:"TRANSFER",desc:$("#desc").value||"Transfer",amt:-amt,status:"FAILED"});toast("Transfer failed: insufficient funds");return fail("Insufficient funds in the selected account.")}
+  if(busyKey)return;busyKey=crypto.randomUUID();
+  src.bal-=amt;dst.bal+=amt;
+  state.tx.unshift({ref:ref(),date:today(),type:"TRANSFER",desc:$("#desc").value||"Transfer",amt:-amt,status:"COMPLETED"});
+  busyKey=null;toast("Transfer completed");state.page="tx";render()}
+const today=()=>new Date().toISOString().slice(0,10);
+const ref=()=>"TXN-"+Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>b.toString(16).padStart(2,"0")).join("").toUpperCase();
+function tx(){let rows=state.tx.filter(t=>(state.f==="ALL"||t.status===state.f)&&(t.ref+t.desc).toLowerCase().includes(state.q.toLowerCase()));
+  const {k,d}=state.sort;rows.sort((a,b)=>(k==="amt"?a.amt-b.amt:a.date.localeCompare(b.date))*d);
+  return `<div class="card"><div class="row"><input id="q" placeholder="Search by reference or description" value="${state.q.replace(/"/g,"&quot;")}"><select id="f">${["ALL","COMPLETED","PENDING","FAILED"].map(s=>`<option ${s===state.f?"selected":""}>${s}</option>`).join("")}</select><button class="btn ghost" id="csv">Download CSV</button></div>
+  <div class="tw">${rows.length?`<table><thead><tr><th>Reference</th><th data-s="date">Date ${k==="date"?(d>0?"↑":"↓"):""}</th><th>Type</th><th>Description</th><th data-s="amt" style="text-align:right">Amount ${k==="amt"?(d>0?"↑":"↓"):""}</th><th>Status</th></tr></thead><tbody>`+
+  rows.map(t=>`<tr><td>${t.ref.slice(0,12)}…</td><td>${t.date}</td><td>${t.type}</td><td>${t.desc.replace(/</g,"&lt;")}</td><td class="amt ${t.amt<0?"neg":"pos"}">${fmt(t.amt)}</td><td><span class="badge ${t.status}">${t.status}</span></td></tr>`).join("")+`</tbody></table>`:`<div class="empty">No transactions match your filters. Clear the search to see them all.</div>`}</div></div>`}
+function csv(){const l=["reference,date,type,description,amount,status",...state.tx.map(t=>[t.ref,t.date,t.type,`"${t.desc.replace(/"/g,'""')}"`,t.amt,t.status].join(","))];
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([l.join("\n")],{type:"text/csv"}));a.download="transactions.csv";a.click();toast("CSV downloaded")}
+function render(){nav();$("#title").textContent=pages[state.page];$("#view").innerHTML={dash,transfer,tx}[state.page]();
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{state.page=b.dataset.go;render()});
+  if(state.page==="transfer")$("#go").onclick=doTransfer;
+  if(state.page==="tx"){const q=$("#q");q.oninput=()=>{state.q=q.value;const p=q.selectionStart;render();$("#q").focus();$("#q").setSelectionRange(p,p)};$("#f").onchange=e=>{state.f=e.target.value;render()};$("#csv").onclick=csv;
+    document.querySelectorAll("th[data-s]").forEach(h=>h.onclick=()=>{const k=h.dataset.s;state.sort={k,d:state.sort.k===k?-state.sort.d:-1};render()})}}
+$("#theme").onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
+render();
+</script>
+</body>
+</html>
